@@ -1,0 +1,7 @@
+# Godot 4 cache/import (dijana semula automatik)
+.godot/
+
+# Fail sistem / editor
+.DS_Store
+Thumbs.db
+*.tmp
