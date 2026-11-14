@@ -433,6 +433,14 @@ func _build_visual(visual: Dictionary) -> void:
 				ClockView.new(int(visual["hour"]), int(visual["minute"]), 370.0))
 		"shape":
 			_visual_holder.add_child(ShapeView.new(str(visual["shape"]), 380.0))
+		"place_value":
+			_visual_holder.add_child(
+				PlaceValueView.new(int(visual["number"]), int(visual["highlight"]),
+					Vector2(880, 330)))
+		"pattern":
+			_visual_holder.add_child(
+				PatternView.new(visual["seq"], int(visual["missing_index"]),
+					Vector2(880, 250)))
 
 
 ## Pilih bilangan lajur yang seimbang (elak baris terakhir yang terlalu kosong).

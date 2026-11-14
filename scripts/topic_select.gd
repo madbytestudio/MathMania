@@ -69,7 +69,8 @@ func _build_grid() -> Control:
 	var center := CenterContainer.new()
 	center.size_flags_vertical = Control.SIZE_EXPAND_FILL
 
-	# 11 topik perlu tiga baris; kad dikecilkan sedikit supaya semuanya muat.
+	# 13 topik disusun dalam HFlowContainer (lajur bervariat); kad dikecilkan
+	# supaya semua muat skrin.
 	var compact := QuestionBank.TOPICS.size() > 8
 	var flow := HFlowContainer.new()
 	flow.alignment = FlowContainer.ALIGNMENT_CENTER

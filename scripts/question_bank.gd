@@ -87,6 +87,18 @@ const TOPICS := [
 		"syllabus": "Ukuran panjang, berat, isi padu",
 		"icon": "res://assets/objects/ruler.png", "color": "4fc3b0",
 	},
+	{
+		"id": "nilai_tempat", "name": "Nilai Tempat", "short": "Tempat",
+		"desc": "Nilai digit ratus, puluh dan sa",
+		"syllabus": "Nilai tempat hingga 1000",
+		"icon": "res://assets/objects/block.png", "color": "f7b8cb",
+	},
+	{
+		"id": "pola_nombor", "name": "Pola Nombor", "short": "Pola",
+		"desc": "Nombor hilang dalam pola menaik",
+		"syllabus": "Pola dan susunan nombor",
+		"icon": "res://assets/objects/puzzle_piece.png", "color": "a8dcf7",
+	},
 ]
 
 ## Bentuk dua dimensi: nama, bilangan sisi dan kunci lukisan.
@@ -156,6 +168,10 @@ static func make_question(topic_id: String, difficulty: int,
 			return _make_bentuk(difficulty, rng)
 		"ukur":
 			return _make_ukur(difficulty, rng)
+		"nilai_tempat":
+			return _make_nilai_tempat(difficulty, rng)
+		"pola_nombor":
+			return _make_pola_nombor(difficulty, rng)
 		_:
 			return _make_tambah(difficulty, rng)
 
@@ -620,6 +636,64 @@ static func _make_ukur(d: int, rng: RandomNumberGenerator) -> Dictionary:
 		"hint": hint,
 	}
 	var deltas := [1, 2, 10, 20] if d == 1 else [10, 20, 50, 100]
+	return _assemble(question, rng, _num_choice(answer),
+		_number_distractors(rng, answer, deltas, 0))
+
+
+# ----------------------------------------------------------- nilai tempat
+static func _make_nilai_tempat(d: int, rng: RandomNumberGenerator) -> Dictionary:
+	var max_val: int = [99, 999, 999][d - 1]
+	var min_val: int = [20, 100, 100][d - 1]
+	var number := rng.randi_range(min_val, max_val)
+	var text := str(number)
+	var digits := text.length()
+
+	# Pilih digit untuk ditandai. Darah 1: puluh atau sa; d >= 2: semua digit.
+	var highlight: int
+	if d == 1:
+		highlight = rng.randi_range(0, 1)
+	else:
+		highlight = rng.randi_range(0, digits - 1)
+
+	var digit := int(text.substr(highlight, 1))
+	var place: int = 10 ** (digits - 1 - highlight)
+	var answer: int = digit * place
+	var place_name: String = ["sa", "puluh", "ratus"][digits - 1 - highlight]
+
+	var question := {
+		"prompt": "Apakah nilai digit %s dalam %s?" % [digit, number],
+		"expr": [],
+		"visual": {"mode": "place_value", "number": number, "highlight": highlight},
+		"hint": "Digit %s berada pada tempat %s (x %d)." % [digit, place_name, place],
+	}
+	var deltas := [10, 20, 50] if d == 1 else [10, 20, 50, 100, 200]
+	return _assemble(question, rng, _num_choice(answer),
+		_number_distractors(rng, answer, deltas, 0))
+
+
+# ---------------------------------------------------------- pola nombor
+static func _make_pola_nombor(d: int, rng: RandomNumberGenerator) -> Dictionary:
+	var steps := [
+		[2, 5, 10],
+		[2, 3, 5, 10],
+		[3, 4, 6, 7, 8, 9],
+	]
+	var step: int = steps[d - 1][rng.randi_range(0, steps[d - 1].size() - 1)]
+	var start := rng.randi_range(1, 20)
+	var seq: Array = []
+	for i in 4:
+		seq.append(start + step * i)
+
+	var hidden := rng.randi_range(0, 3)
+	var answer: int = seq[hidden]
+
+	var question := {
+		"prompt": "Nombor manakah yang tertinggal?",
+		"expr": [],
+		"visual": {"mode": "pattern", "seq": seq, "missing_index": hidden},
+		"hint": "Pola tambah %d setiap kali." % step,
+	}
+	var deltas := [step, step * 2, 5, 10]
 	return _assemble(question, rng, _num_choice(answer),
 		_number_distractors(rng, answer, deltas, 0))
 
