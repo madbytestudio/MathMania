@@ -117,6 +117,12 @@ const TOPICS := [
 		"syllabus": "Pengurusan data: piktograf",
 		"icon": "res://assets/objects/block.png", "color": "b7e4a8",
 	},
+	{
+		"id": "tambah_berulang", "name": "Tambah Berulang", "short": "Berulang",
+		"desc": "Kumpulan sama banyak → asas darab",
+		"syllabus": "Tambah berulang",
+		"icon": "res://assets/objects/cookie.png", "color": "7ec850",
+	},
 ]
 
 ## Bentuk dua dimensi: nama, bilangan sisi dan kunci lukisan.
@@ -196,6 +202,8 @@ static func make_question(topic_id: String, difficulty: int,
 			return _make_operasi_bergabung(difficulty, rng)
 		"pengurusan_data":
 			return _make_pengurusan_data(difficulty, rng)
+		"tambah_berulang":
+			return _make_tambah_berulang(difficulty, rng)
 		_:
 			return _make_tambah(difficulty, rng)
 
@@ -903,6 +911,47 @@ static func _make_pengurusan_data(d: int, rng: RandomNumberGenerator) -> Diction
 				_number_distractors(rng, answer, deltas, 0))
 
 	return question
+
+
+# ------------------------------------------------------ tambah berulang
+static func _make_tambah_berulang(d: int, rng: RandomNumberGenerator) -> Dictionary:
+	# Asas darab: kumpulan sama banyak ditambah berulang.
+	# Darah 1: 2-3 kumpulan, 2-4 bintang setiap; d=2: 3-4 kumpulan, 3-6 setiap;
+	# d=3: 4-5 kumpulan, 4-8 setiap.
+	var group_count_min: int = [2, 3, 4][d - 1]
+	var items_min: int = [2, 3, 4][d - 1]
+	var items_max: int = [4, 6, 8][d - 1]
+
+	var group_count: int = rng.randi_range(group_count_min, group_count_min + 1)
+	var items_per_group: int = rng.randi_range(items_min, items_max)
+
+	var answer := group_count * items_per_group
+
+	var sprite := _random_object(rng)
+	var groups: Array = []
+	for i in group_count:
+		groups.append([items_per_group, false])
+
+	var question := {
+		"prompt": "%d kumpulan, setiap kumpulan %d. Berapakah jumlahnya?" %
+			[group_count, items_per_group],
+		"expr": [],
+		"visual": {"mode": "groups", "sprite": sprite, "groups": groups},
+		"hint": "Tambah bilangan yang sama sebanyak bilangan kumpulan.",
+	}
+
+	# Susun ekspresi: a + a + ... + a = ?
+	var expr_parts: Array = []
+	for i in group_count:
+		expr_parts.append(_num(items_per_group))
+		if i < group_count - 1:
+			expr_parts.append(_op("+"))
+	var expr := _equation(expr_parts)
+	question["expr"] = expr
+
+	var deltas := [items_per_group, group_count, answer + 1, answer - 1]
+	return _assemble(question, rng, _num_choice(answer),
+		_number_distractors(rng, answer, deltas, 0))
 
 
 # --------------------------------------------------------------- pembantu

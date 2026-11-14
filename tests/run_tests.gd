@@ -18,7 +18,7 @@ func _run() -> void:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 20240501
 
-	_expect(QuestionBank.TOPICS.size() == 16, "bank: perlu 16 topik")
+	_expect(QuestionBank.TOPICS.size() == 17, "bank: perlu 17 topik")
 
 	for topic in QuestionBank.TOPICS:
 		for difficulty in [1, 2, 3]:

@@ -36,6 +36,7 @@ func _run() -> void:
 	await _capture("res://scenes/game.tscn", "17_game_bundar_nombor", "bundar_nombor")
 	await _capture("res://scenes/game.tscn", "18_game_operasi_bergabung", "operasi_bergabung")
 	await _capture("res://scenes/game.tscn", "19_game_pengurusan_data", "pengurusan_data")
+	await _capture("res://scenes/game.tscn", "20_game_tambah_berulang", "tambah_berulang")
 	await _capture("res://scenes/result.tscn", "10_result", "tambah")
 	await _capture("res://scenes/result.tscn", "16_result_semakan", "tambah",
 		func(scene: Node) -> void:
