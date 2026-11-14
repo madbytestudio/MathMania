@@ -3,15 +3,14 @@
 Senarai cadangan topik untuk ditambah pada masa hadapan. Simpan fail ini sebagai
 rujukan; kemas kini lajur **Status** apabila sesuatu topik sudah dilaksanakan.
 
-Status semasa: **11 topik** dalam `QuestionBank.TOPICS` (kod).
-**Nilai Tempat** dan **Pola Nombor** — visual (`place_value_view.gd`, `pattern_view.gd`)
-sudah siap, masih belum dipasang dalam `question_bank.gd` / `game.gd`.
+Status semasa: **14 topik** dalam `QuestionBank.TOPICS` (kod).
+**Nilai Tempat**, **Pola Nombor** dan **Bundar Nombor** — siap visual dan dipasang code.
 
 ## Topik KSSR yang belum ada
 
 | Topik | Kandungan | Visual / interaksi | Usaha | Status |
 |---|---|---|---|---|
-| **Bundar Nombor** | Bundar kepada puluh dan ratus terdekat | Garis nombor dengan titik tengah | Mudah | ⬜ Belum |
+| **Bundar Nombor** | Bundar kepada puluh dan ratus terdekat | Garis nombor dengan titik tengah | Mudah | ✅ Selesai |
 | **Operasi Bergabung** | `12 + 8 − 5`, `30 − 10 + 4` | Guna paparan operasi sedia ada | Mudah | ⬜ Belum |
 | **Tambah Berulang** | `4 + 4 + 4 = 12` → asas darab | Kumpulan gambar (dah ada) | Mudah | ⬜ Belum |
 | **Pengurusan Data** | Baca piktograf, kira dan banding data | Carta piktograf baru | Sederhana | ⬜ Belum |
@@ -19,13 +18,6 @@ sudah siap, masih belum dipasang dalam `question_bank.gd` / `game.gd`.
 | **Alat Ukur** | Baca pembaris, neraca, silinder penyukat | Lukisan pembaris/skala baru | Sederhana | ⬜ Belum |
 | **Wang Interaktif** | Pilih syiling/nota untuk capai jumlah | Seret & lepas syiling | Sederhana–susah | ⬜ Belum |
 | **Simetri** | Kenal paksi simetri bentuk | Garis lipat pada bentuk | Sederhana | ⬜ Belum |
-
-## Antara antara: siap visual, belum dipasang code
-
-| Topik | Kandungan | Visual | Status |
-|---|---|---|---|
-| **Nilai Tempat & Nilai Digit** | Nombor hingga 1000: ratus, puluh, sa | Blok ratus/puluh/sa, digit ditanda | 🟡 Visual siap, belum dipasang |
-| **Pola & Susun Nombor** | Pola menaik/menurun, langkau 2/5/10, susun tertib | Kad nombor, nombor hilang | 🟡 Visual siap, belum dipasang |
 
 ## Idea "topik istimewa" (bukan KSSR, tambah variasi)
 
@@ -40,13 +32,13 @@ sudah siap, masih belum dipasang dalam `question_bank.gd` / `game.gd`.
 
 ## Cadangan keutamaan
 
-Kalau nak tambah 3–5 topik sahaja dahulu:
+Kalau nak tambah 3–5 topik sahaja seterusnya:
 
-1. **Nilai Tempat** — visual dah siap, hanya perlu daftarkan dalam code.
-2. **Pola Nombor** — visual dah siap, hanya perlu daftarkan dalam code.
-3. **Bundar Nombor** — ringkas, guna garis nombor.
-4. **Operasi Bergabung** — hampir percuma, guna semula paparan operasi.
-5. **Pengurusan Data/Piktograf** — satu-satunya bidang KSSR yang belum ada.
+1. **Operasi Bergabung** — hampir percuma, guna semula paparan operasi.
+2. **Pengurusan Data/Piktograf** — satu-satunya bidang KSSR yang belum ada.
+3. **Tambah Berulang** — asas darab, guna kumpulan gambar sedia ada.
+4. **Hari & Bulan** — pelengkap kepada topik Masa & Waktu.
+5. **Cabaran Campuran** — guna semula semua penjana soalan sedia ada.
 
 ## Nota pelaksanaan
 
@@ -58,4 +50,4 @@ Kalau nak tambah 3–5 topik sahaja dahulu:
   `game.gd` (`_build_visual`).
 - Kemas kini `tests/test_runner.gd`, `tests/run_tests.gd` (jumlah topik) dan
   `tests/screenshot.gd` (tangkapan skrin topik baharu).
-- Topik ke-13 memerlukan susunan grid 5 lajur dalam `topic_select.gd`.
+- Topik ke-14 disusun oleh `HFlowContainer` dalam `topic_select.gd` (lajur bervariat).

@@ -99,6 +99,12 @@ const TOPICS := [
 		"syllabus": "Pola dan susunan nombor",
 		"icon": "res://assets/objects/puzzle_piece.png", "color": "a8dcf7",
 	},
+	{
+		"id": "bundar_nombor", "name": "Bundar Nombor", "short": "Bundar",
+		"desc": "Bundar kepada puluh atau ratus terdekat",
+		"syllabus": "Bundaran nombor",
+		"icon": "res://assets/objects/ruler.png", "color": "fde08a",
+	},
 ]
 
 ## Bentuk dua dimensi: nama, bilangan sisi dan kunci lukisan.
@@ -172,6 +178,8 @@ static func make_question(topic_id: String, difficulty: int,
 			return _make_nilai_tempat(difficulty, rng)
 		"pola_nombor":
 			return _make_pola_nombor(difficulty, rng)
+		"bundar_nombor":
+			return _make_bundar_nombor(difficulty, rng)
 		_:
 			return _make_tambah(difficulty, rng)
 
@@ -694,6 +702,44 @@ static func _make_pola_nombor(d: int, rng: RandomNumberGenerator) -> Dictionary:
 		"hint": "Pola tambah %d setiap kali." % step,
 	}
 	var deltas := [step, step * 2, 5, 10]
+	return _assemble(question, rng, _num_choice(answer),
+		_number_distractors(rng, answer, deltas, 0))
+
+
+# ----------------------------------------------------------- bundar nombor
+static func _make_bundar_nombor(d: int, rng: RandomNumberGenerator) -> Dictionary:
+	# Darah 1: bundar kepada puluh (10-99); d=2: bundar kepada puluh (100-999);
+	# d=3: bundar kepada ratus (100-999).
+	var to_hundred: bool = d == 3
+	var min_val: int = 100 if to_hundred else (10 if d == 1 else 100)
+	var max_val: int = 999
+	var number := rng.randi_range(min_val, max_val)
+
+	var unit: int = 100 if to_hundred else 10
+	var low := (number / unit) * unit
+	var high := low + unit
+	var midpoint := low + unit / 2
+
+	var answer: int
+	if number < midpoint:
+		answer = low
+	else:
+		answer = high
+
+	var unit_name: String = "ratus" if to_hundred else "puluh"
+	var question := {
+		"prompt": "Bundarkan %d kepada %s terdekat." % [number, unit_name],
+		"expr": [],
+		"visual": {
+			"mode": "number_line",
+			"number": number,
+			"low": low,
+			"high": high,
+			"midpoint": midpoint,
+		},
+		"hint": "Lihat sama ada nombor di sebelah kiri atau kanan titik tengah.",
+	}
+	var deltas := [unit, unit * 2, 5, 10] if not to_hundred else [50, 100, 150, 200]
 	return _assemble(question, rng, _num_choice(answer),
 		_number_distractors(rng, answer, deltas, 0))
 

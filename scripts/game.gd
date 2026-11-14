@@ -441,6 +441,11 @@ func _build_visual(visual: Dictionary) -> void:
 			_visual_holder.add_child(
 				PatternView.new(visual["seq"], int(visual["missing_index"]),
 					Vector2(880, 250)))
+		"number_line":
+			_visual_holder.add_child(
+				NumberLineView.new(int(visual["number"]), int(visual["low"]),
+					int(visual["high"]), int(visual["midpoint"]),
+					Vector2(880, 180)))
 
 
 ## Pilih bilangan lajur yang seimbang (elak baris terakhir yang terlalu kosong).

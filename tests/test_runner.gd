@@ -39,7 +39,7 @@ func _test_question_bank() -> void:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 20240501
 
-	_expect(QuestionBank.TOPICS.size() == 13, "bank: perlu 13 topik")
+	_expect(QuestionBank.TOPICS.size() == 14, "bank: perlu 14 topik")
 	var seen_ids: Array = []
 	for topic in QuestionBank.TOPICS:
 		var id := str(topic["id"])
