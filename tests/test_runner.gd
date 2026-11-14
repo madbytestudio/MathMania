@@ -39,7 +39,7 @@ func _test_question_bank() -> void:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 20240501
 
-	_expect(QuestionBank.TOPICS.size() == 14, "bank: perlu 14 topik")
+	_expect(QuestionBank.TOPICS.size() == 15, "bank: perlu 15 topik")
 	var seen_ids: Array = []
 	for topic in QuestionBank.TOPICS:
 		var id := str(topic["id"])
@@ -184,6 +184,27 @@ func _verify(tokens: Array, answer: Dictionary) -> bool:
 			_:
 				return false
 		return absf(expected - result) < 0.011
+
+	# Persamaan berantai: [n1, op1, n2, op2, n3, ..., =, hasil]
+	if seq.size() >= 7:
+		var eq_index := -1
+		for i in seq.size():
+			if seq[i]["t"] == "op" and seq[i]["v"] == "=":
+				eq_index = i
+				break
+		if eq_index > 0 and eq_index < seq.size() - 1:
+			var result := _value_of(seq[0])
+			var i := 1
+			while i < eq_index:
+				var symbol: String = seq[i]["v"]
+				var next_val := _value_of(seq[i + 1])
+				if symbol == "+":
+					result += next_val
+				elif symbol == "-":
+					result -= next_val
+				i += 2
+			var final_val := _value_of(seq[seq.size() - 1])
+			return absf(result - final_val) < 0.011
 	return false
 
 

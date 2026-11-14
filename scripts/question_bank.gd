@@ -105,6 +105,12 @@ const TOPICS := [
 		"syllabus": "Bundaran nombor",
 		"icon": "res://assets/objects/ruler.png", "color": "fde08a",
 	},
+	{
+		"id": "operasi_bergabung", "name": "Operasi Bergabung", "short": "Bergabung",
+		"desc": "Tambah dan tolak berseterusnya",
+		"syllabus": "Operasi bergabung tambah dan tolak",
+		"icon": "res://assets/objects/calculator.png", "color": "cbb3e6",
+	},
 ]
 
 ## Bentuk dua dimensi: nama, bilangan sisi dan kunci lukisan.
@@ -180,6 +186,8 @@ static func make_question(topic_id: String, difficulty: int,
 			return _make_pola_nombor(difficulty, rng)
 		"bundar_nombor":
 			return _make_bundar_nombor(difficulty, rng)
+		"operasi_bergabung":
+			return _make_operasi_bergabung(difficulty, rng)
 		_:
 			return _make_tambah(difficulty, rng)
 
@@ -740,6 +748,75 @@ static func _make_bundar_nombor(d: int, rng: RandomNumberGenerator) -> Dictionar
 		"hint": "Lihat sama ada nombor di sebelah kiri atau kanan titik tengah.",
 	}
 	var deltas := [unit, unit * 2, 5, 10] if not to_hundred else [50, 100, 150, 200]
+	return _assemble(question, rng, _num_choice(answer),
+		_number_distractors(rng, answer, deltas, 0))
+
+
+# --------------------------------------------------- operasi bergabung
+static func _make_operasi_bergabung(d: int, rng: RandomNumberGenerator) -> Dictionary:
+	# Darah 1: 2 operasi, nombor kecil; d=2: 2 operasi, nombor sederhana;
+	# d=3: 3 operasi, nombor lebih besar. Nilai tak negatif sepanjang barisan.
+	var num_ops: int = [2, 2, 3][d - 1]
+	var max_val: int = [30, 200, 500][d - 1]
+	var min_val: int = [2, 20, 50][d - 1]
+
+	var nums: Array = []
+	var ops: Array = []
+	var answer: int = 0
+
+	# Jana semula sehingga barisan bernilai tak negatif di setiap tahap.
+	var ok := false
+	for attempt in range(60):
+		nums = []
+		ops = []
+		nums.append(rng.randi_range(min_val, max_val))
+		for i in range(num_ops - 1):
+			ops.append(["+", "-"][rng.randi_range(0, 1)])
+			nums.append(rng.randi_range(min_val, max_val))
+
+		answer = nums[0]
+		ok = true
+		for i in ops.size():
+			if ops[i] == "+":
+				answer += nums[i + 1]
+			else:
+				answer -= nums[i + 1]
+			if answer < 0:
+				ok = false
+				break
+		if ok:
+			break
+
+	if not ok:
+		# Simpanan: paksa barisan positif dengan nombor pertama yang besar.
+		nums = [rng.randi_range(min_val, max_val)]
+		ops = []
+		for i in num_ops - 1:
+			ops.append("+")
+			nums.append(rng.randi_range(min_val, max_val))
+		answer = 0
+		for n in nums:
+			answer += int(n)
+
+	# Susun token ekspresi: [n1, op1, n2, op2, n3, ..., =, ?]
+	var expr_parts: Array = []
+	for i in nums.size():
+		expr_parts.append(_num(int(nums[i])))
+		if i < ops.size():
+			expr_parts.append(_op(ops[i]))
+	var expr := _equation(expr_parts)
+
+	var expr_text := str(int(nums[0]))
+	for i in ops.size():
+		expr_text += " %s %s" % [ops[i], str(int(nums[i + 1]))]
+
+	var question := {
+		"prompt": "%s = ?" % expr_text,
+		"expr": expr,
+		"visual": {"mode": "none"},
+		"hint": "Hitung dari kiri ke kanan, satu operasi pada masa.",
+	}
+	var deltas := [1, 2, 5, 10] if d == 1 else [5, 10, 20, 50]
 	return _assemble(question, rng, _num_choice(answer),
 		_number_distractors(rng, answer, deltas, 0))
 
