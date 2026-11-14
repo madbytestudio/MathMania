@@ -3,8 +3,8 @@
 Senarai cadangan topik untuk ditambah pada masa hadapan. Simpan fail ini sebagai
 rujukan; kemas kini lajur **Status** apabila sesuatu topik sudah dilaksanakan.
 
-Status semasa: **15 topik** dalam `QuestionBank.TOPICS` (kod).
-**Nilai Tempat**, **Pola Nombor**, **Bundar Nombor** dan **Operasi Bergabung** — siap visual dan dipasang code.
+Status semasa: **16 topik** dalam `QuestionBank.TOPICS` (kod).
+**Nilai Tempat**, **Pola Nombor**, **Bundar Nombor**, **Operasi Bergabung** dan **Pengurusan Data** — siap visual dan dipasang code.
 
 ## Topik KSSR yang belum ada
 
@@ -13,7 +13,7 @@ Status semasa: **15 topik** dalam `QuestionBank.TOPICS` (kod).
 | **Bundar Nombor** | Bundar kepada puluh dan ratus terdekat | Garis nombor dengan titik tengah | Mudah | ✅ Selesai |
 | **Operasi Bergabung** | `12 + 8 − 5`, `30 − 10 + 4` | Guna paparan operasi sedia ada | Mudah | ✅ Selesai |
 | **Tambah Berulang** | `4 + 4 + 4 = 12` → asas darab | Kumpulan gambar (dah ada) | Mudah | ⬜ Belum |
-| **Pengurusan Data** | Baca piktograf, kira dan banding data | Carta piktograf baru | Sederhana | ⬜ Belum |
+| **Pengurusan Data** | Baca piktograf, kira dan banding data | Carta piktograf baru | Sederhana | ✅ Selesai |
 | **Hari, Minggu & Bulan** | Nama hari, bulan, bilangan hari | Kalendar interaktif | Sederhana | ⬜ Belum |
 | **Alat Ukur** | Baca pembaris, neraca, silinder penyukat | Lukisan pembaris/skala baru | Sederhana | ⬜ Belum |
 | **Wang Interaktif** | Pilih syiling/nota untuk capai jumlah | Seret & lepas syiling | Sederhana–susah | ⬜ Belum |
@@ -34,11 +34,11 @@ Status semasa: **15 topik** dalam `QuestionBank.TOPICS` (kod).
 
 Kalau nak tambah 3–5 topik sahaja seterusnya:
 
-1. **Pengurusan Data/Piktograf** — satu-satunya bidang KSSR yang belum ada.
-2. **Tambah Berulang** — asas darab, guna kumpulan gambar sedia ada.
-3. **Hari & Bulan** — pelengkap kepada topik Masa & Waktu.
-4. **Cabaran Campuran** — guna semula semua penjana soalan sedia ada.
-5. **Cabaran Masa** — 60 saat, soalan rawak semua topik.
+1. **Tambah Berulang** — asas darab, guna kumpulan gambar sedia ada.
+2. **Hari & Bulan** — pelengkap kepada topik Masa & Waktu.
+3. **Cabaran Campuran** — guna semula semua penjana soalan sedia ada.
+4. **Cabaran Masa** — 60 saat, soalan rawak semua topik.
+5. **Alat Ukur** — baca pembaris/skala, satu bidang KSSR yang belum ada.
 
 ## Nota pelaksanaan
 
@@ -50,4 +50,4 @@ Kalau nak tambah 3–5 topik sahaja seterusnya:
   `game.gd` (`_build_visual`).
 - Kemas kini `tests/test_runner.gd`, `tests/run_tests.gd` (jumlah topik) dan
   `tests/screenshot.gd` (tangkapan skrin topik baharu).
-- Topik ke-15 disusun oleh `HFlowContainer` dalam `topic_select.gd` (lajur bervariat).
+- Topik ke-16 disusun oleh `HFlowContainer` dalam `topic_select.gd` (lajur bervariat).

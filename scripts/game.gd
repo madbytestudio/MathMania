@@ -446,6 +446,10 @@ func _build_visual(visual: Dictionary) -> void:
 				NumberLineView.new(int(visual["number"]), int(visual["low"]),
 					int(visual["high"]), int(visual["midpoint"]),
 					Vector2(880, 180)))
+		"pictograph":
+			_visual_holder.add_child(
+				PictographView.new(visual["categories"],
+					Vector2(880, 260)))
 
 
 ## Pilih bilangan lajur yang seimbang (elak baris terakhir yang terlalu kosong).

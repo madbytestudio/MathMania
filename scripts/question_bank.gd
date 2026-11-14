@@ -111,6 +111,12 @@ const TOPICS := [
 		"syllabus": "Operasi bergabung tambah dan tolak",
 		"icon": "res://assets/objects/calculator.png", "color": "cbb3e6",
 	},
+	{
+		"id": "pengurusan_data", "name": "Pengurusan Data", "short": "Data",
+		"desc": "Baca piktograf dan banding data",
+		"syllabus": "Pengurusan data: piktograf",
+		"icon": "res://assets/objects/block.png", "color": "b7e4a8",
+	},
 ]
 
 ## Bentuk dua dimensi: nama, bilangan sisi dan kunci lukisan.
@@ -188,6 +194,8 @@ static func make_question(topic_id: String, difficulty: int,
 			return _make_bundar_nombor(difficulty, rng)
 		"operasi_bergabung":
 			return _make_operasi_bergabung(difficulty, rng)
+		"pengurusan_data":
+			return _make_pengurusan_data(difficulty, rng)
 		_:
 			return _make_tambah(difficulty, rng)
 
@@ -819,6 +827,82 @@ static func _make_operasi_bergabung(d: int, rng: RandomNumberGenerator) -> Dicti
 	var deltas := [1, 2, 5, 10] if d == 1 else [5, 10, 20, 50]
 	return _assemble(question, rng, _num_choice(answer),
 		_number_distractors(rng, answer, deltas, 0))
+
+
+# ------------------------------------------------------ pengurusan data
+static func _make_pengurusan_data(d: int, rng: RandomNumberGenerator) -> Dictionary:
+	var cat_count: int = [2, 3, 4][d - 1]
+	var max_count: int = [6, 9, 12][d - 1]
+	var min_count: int = [2, 3, 4][d - 1]
+
+	var category_names := ["Aple", "Pepayar", "Mangga", "Durian", "Pisang",
+		"Rambutan", "Cherri", "Limau", "Nenas", "Manggis"]
+	for i in range(category_names.size() - 1, 0, -1):
+		var j := rng.randi_range(0, i)
+		var tmp: String = category_names[i]
+		category_names[i] = category_names[j]
+		category_names[j] = tmp
+
+	var categories: Array = []
+	for i in cat_count:
+		var count := rng.randi_range(min_count, max_count)
+		categories.append({
+			"name": category_names[i],
+			"count": count,
+			"sprite": _random_object(rng),
+		})
+
+	var total := 0
+	var max_count_val := 0
+	var min_count_val := 999
+	var max_name := ""
+	var min_name := ""
+	for cat in categories:
+		var c := int(cat["count"])
+		total += c
+		if c > max_count_val:
+			max_count_val = c
+			max_name = str(cat["name"])
+		if c < min_count_val:
+			min_count_val = c
+			min_name = str(cat["name"])
+
+	# Jenis soalan: jumlah (nombor), lebih (nama), beza (nombor).
+	# "lebih" memerlukan sekurang-kurangnya 3 kategori supaya 3 pilihan tetap wujud.
+	var qtype_options := ["jumlah", "beza"]
+	if cat_count >= 3:
+		qtype_options.append("lebih")
+	var qtype: String = qtype_options[rng.randi_range(0, qtype_options.size() - 1)]
+
+	var question := {
+		"expr": [],
+		"visual": {"mode": "pictograph", "categories": categories},
+		"hint": "Kira bilangan ikon untuk setiap kategori.",
+	}
+
+	match qtype:
+		"jumlah":
+			var answer := total
+			question["prompt"] = "Berapakah jumlah semua ikon dalam piktograf ini?"
+			var deltas := [1, 2, 3, 5]
+			return _assemble(question, rng, _num_choice(answer),
+				_number_distractors(rng, answer, deltas, 0))
+		"lebih":
+			var answer := max_name
+			question["prompt"] = "Kategori manakah yang paling banyak ikonnya?"
+			var names: Array = []
+			for cat in categories:
+				names.append(str(cat["name"]))
+			var others := _text_distractors(rng, answer, names)
+			return _assemble(question, rng, _text_choice(answer), others)
+		"beza":
+			var answer := max_count_val - min_count_val
+			question["prompt"] = "Berapakah beza antara kategori paling banyak dan paling sedikit?"
+			var deltas := [1, 2, 3, 5]
+			return _assemble(question, rng, _num_choice(answer),
+				_number_distractors(rng, answer, deltas, 0))
+
+	return question
 
 
 # --------------------------------------------------------------- pembantu
